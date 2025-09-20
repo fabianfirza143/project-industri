@@ -34,6 +34,16 @@
         `;
       });
     }
+// Kirim form
+document.getElementById("formTransaksi").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  await fetch("/api/transaksi", { method: "POST", body: formData });
+  e.target.reset();
+  loadTransaksi();
+  loadRekap();
+});
+
 
     // Hapus transaksi
     async function hapusTransaksi(id) {

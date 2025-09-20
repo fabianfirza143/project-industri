@@ -15,19 +15,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ---------------------
-// POST transaksi
-// ---------------------
-// POST transaksi
 router.post("/transaksi", upload.single("bukti"), (req, res) => {
-  const { tanggal, nama, makanan, harga, uang } = req.body;
+  const { tanggal, nama, makanan, harga, uang, kembalian, kekurangan } = req.body;
 
   const hargaNum = parseFloat(harga) || 0;
   const uangNum = parseFloat(uang) || 0;
-
-  // ✅ perhitungan di server
-  const kembalian = uangNum > hargaNum ? uangNum - hargaNum : 0;
-  const kekurangan = uangNum < hargaNum ? hargaNum - uangNum : 0;
+  const kembalianNum = parseFloat(kembalian) || 0;
+  const kekuranganNum = parseFloat(kekurangan) || 0;
 
   const bukti = req.file ? req.file.filename : null;
 
@@ -41,17 +35,16 @@ router.post("/transaksi", upload.single("bukti"), (req, res) => {
     tanggal,
     nama,
     makanan,
-    parseFloat(hargaNum.toFixed(2)),
-    parseFloat(uangNum.toFixed(2)),
-    parseFloat(kembalian.toFixed(2)),
-    parseFloat(kekurangan.toFixed(2)),
+    hargaNum,
+    uangNum,
+    kembalianNum,
+    kekuranganNum,
     bukti
   ], (err) => {
     if (err) throw err;
     res.json({ success: true, message: "Transaksi berhasil disimpan!" });
   });
 });
-
 // ---------------------
 // GET semua transaksi
 // ---------------------
