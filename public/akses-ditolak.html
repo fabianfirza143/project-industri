@@ -6,14 +6,70 @@
   <title>Akses Ditolak</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-  <div class="text-center p-4 border rounded shadow bg-white">
-    <h2 class="text-danger mb-3">❌ Akses Ditolak!</h2>
-    <p class="mb-3">Anda tidak memiliki izin untuk mengakses halaman ini atau akun belum terdaftar.</p>
-    <a href="/login" class="btn btn-success">⬅️ Kembali ke Login</a>
+<body class="d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+  <div class="akses-banner mb-4 animate__animated animate__fadeInDown">
+    <i class="fa-solid fa-ban fa-3x me-2"></i> Akses Ditolak!
   </div>
-  <footer>
-    <p>© 2025 Kantin JP 1 by Fabian 🍱</p>
+  <div class="akses-card text-center animate__animated animate__fadeInUp">
+    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Akses Ditolak" style="width:90px; margin-bottom:1rem; opacity:0.85;">
+    <h3 class="text-danger mb-2">Oops! Tidak Bisa Masuk</h3>
+    <p class="mb-3 text-secondary">Anda tidak memiliki izin untuk mengakses halaman ini.<br>Silakan login dengan akun yang benar atau hubungi admin.</p>
+    <a href="/login" class="btn btn-success btn-lg px-4"><i class="fa fa-arrow-left me-2"></i>Kembali ke Login</a>
+  </div>
+  <footer class="akses-footer mt-4">
+    <p class="mb-0">© 2025 Kantin JP 1 by Fabian 🍱</p>
   </footer>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    .akses-banner {
+      background: linear-gradient(90deg,#ff5252 60%,#e3f2fd 100%);
+      color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px rgba(255,82,82,0.10);
+      padding: 1.2rem 2rem;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .akses-card {
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px rgba(255,82,82,0.10);
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem 2rem 1.5rem 2rem;
+      border: 2.5px solid #ff5252;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-success {
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(67,234,124,0.10);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-success:hover {
+      background: #2e7d32;
+      color: #fff;
+      transform: scale(1.03);
+    }
+    .akses-footer {
+      border-radius: 18px 18px 0 0;
+      box-shadow: 0 -2px 12px rgba(255,82,82,0.10);
+      background: linear-gradient(90deg,#ff5252 60%,#e3f2fd 100%);
+      font-size: 1.1rem;
+      color: #fff;
+      margin-top: 2rem;
+      padding: 0.5rem 0;
+      text-align: center;
+    }
+  </style>
 </body>
 </html>
