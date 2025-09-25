@@ -8,7 +8,7 @@ document.getElementById("formTransaksi").addEventListener("submit", async (e) =>
   loadRekap();
 });
 
-// 🔹 Formatter tanggal
+// Formatter tanggal
 function formatTanggal(tgl) {
   const date = new Date(tgl);
   const day = String(date.getDate()).padStart(2, "0");
@@ -25,32 +25,42 @@ async function loadTransaksi() {
   tbody.innerHTML = "";
   data.forEach((t, i) => {
     tbody.innerHTML += `
-      <tr>
-        <td>${i + 1}</td>
-        <td>${formatTanggal(t.tanggal)}</td>
-        <td>${t.nama}</td>
+      <tr data-id="${t.id}" class="align-middle">
+        <td class="fw-bold text-secondary">${i + 1}</td>
+        <td class="text-primary">${formatTanggal(t.tanggal)}</td>
+        <td class="fw-semibold">${t.nama}</td>
         <td>${t.makanan}</td>
-        <td>Rp ${t.harga}</td>
-        <td>Rp ${t.uang}</td>
-        <td>Rp ${t.kembalian}</td>
-        <td style="color:${t.kekurangan > 0 ? "red" : "black"}">Rp ${t.kekurangan}</td>
-        <td>${t.bukti ? `<img src="/uploads/${t.bukti}" style="max-width:50px;">` : "-"}</td>
+        <td class="text-end">Rp ${t.harga.toLocaleString()}</td>
+        <td class="text-end">Rp ${t.uang.toLocaleString()}</td>
+        <td class="text-end">Rp ${t.kembalian.toLocaleString()}</td>
+        <td class="text-end" style="color:${t.kekurangan > 0 ? 'red' : 'green'};font-weight:600;">Rp ${t.kekurangan.toLocaleString()}</td>
+        <td>${t.bukti ? `<img src="/uploads/${t.bukti}" class="rounded shadow-sm" style="max-width:50px;max-height:50px;object-fit:cover;">` : "<span class='text-muted'>-</span>"}</td>
         <td>
-          <button class="btn btn-success btn-sm" onclick="hapusTransaksi(${t.id})">Lunas</button>
+          ${
+            t.status === "Lunas"
+              ? '<span class="badge rounded-pill bg-success px-3 py-2 shadow-sm d-inline-flex align-items-center" style="font-size:1rem;font-weight:600;"><span class="me-1">✔️</span> Lunas</span>'
+              : `<button class="btn btn-warning btn-sm rounded-pill px-3 py-2 shadow-sm fw-semibold" onclick="updateStatus(${t.id}, 'lunas')"><span class='me-1'>⏳</span> Belum Lunas</button>`
+          }
         </td>
       </tr>
     `;
   });
 }
 
-// Hapus transaksi
-async function hapusTransaksi(id) {
-  if (confirm("Yakin transaksi sudah lunas?")) {
-    await fetch(`/admin/transaksi/${id}`, { method: "DELETE" });
-    loadTransaksi();
+
+// Update status → permanen di database
+async function updateStatus(id, status) {
+  const url = `/api/transaksi/${id}/${status}`;
+  const res = await fetch(url, { method: "PUT" });
+  const result = await res.json();
+  if(result.success){
+    loadTransaksi(); // refresh tabel agar status terbaru tampil
     loadRekap();
+  } else {
+    alert("Gagal update status!");
   }
 }
+
 
 // Load rekap
 async function loadRekap() {

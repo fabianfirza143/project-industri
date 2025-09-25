@@ -14,9 +14,8 @@ db.connect((err) => {
     console.error("❌ Gagal konek ke database:", err.message);
     throw err;
   }
-  console.log("✅ Terhubung ke database MySQL (kantin)");
+  console.log("terbubung");
 });
-
 // Wrapper query biar lebih rapi pakai async/await
 db.queryAsync = (sql, params = []) => {
   return new Promise((resolve, reject) => {

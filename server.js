@@ -95,7 +95,8 @@ app.get("/siswa", cekLogin, (req, res) => {
 });
 
 app.post("/siswa/transaksi", cekLogin, upload.single("bukti"), (req, res) => {
-  const { tanggal, nama, makanan, harga, uang, kembalian_diterima } = req.body;
+  const { tanggal, makanan, harga, uang, kembalian_diterima } = req.body;
+  const nama = req.session.user.username;
 
   const hargaNum = parseFloat(harga) || 0;
   const uangNum = parseFloat(uang) || 0;
@@ -123,6 +124,30 @@ app.get("/siswa/transaksi", cekLogin, (req, res) => {
     (err, result) => {
       if (err) throw err;
       res.json(result);
+    }
+  );
+});
+
+app.get("/siswa/riwayat", cekLogin, (req, res) => {
+  if (req.session.user.role !== "siswa") return aksesDitolak(res);
+  db.query(
+    "SELECT * FROM transaksi WHERE nama=?",
+    [req.session.user.username],
+    (err, result) => {
+      if (err) throw err;
+      res.json(result);
+    }
+  );
+});
+
+app.get("/siswa/rekap", cekLogin, (req, res) => {
+  if (req.session.user.role !== "siswa") return aksesDitolak(res);
+  db.query(
+    "SELECT COUNT(*) AS totalTransaksi, SUM(harga) AS totalPemasukan, SUM(kekurangan) AS totalKurang FROM transaksi WHERE nama=?",
+    [req.session.user.username],
+    (err, result) => {
+      if (err) throw err;
+      res.json(result[0]);
     }
   );
 });
@@ -160,10 +185,22 @@ app.get("/admin/rekap", cekLogin, (req, res) => {
   );
 });
 
-// ---------------- HALAMAN UTAMA ----------------
+async function loadRekapSiswa() {
+  const { username } = req.session.user;
+  db.query(
+    "SELECT COUNT(*) AS totalTransaksi, SUM(harga) AS totalPemasukan, SUM(kekurangan) AS totalKurang FROM transaksi WHERE nama=?",
+    [username],
+    (err, result) => {
+      if (err) throw err;
+      console.log("Rekap siswa:", result[0]);
+    }
+  );
+}
+
 app.get("/", (req, res) => {
   res.redirect("/login");
 });
 
-// Jalankan server
-app.listen(3000, () => console.log("🚀 Server running at http://localhost:3000"));
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});

@@ -5,117 +5,281 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kantin SMK - Siswa</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      background: linear-gradient(120deg,#e3f2fd 0%,#fff 100%);
+      min-height: 100vh;
+    }
+    .card-modern {
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      border: none;
+      background: #fff;
+      transition: box-shadow 0.2s;
+    }
+    .card-modern:hover {
+      box-shadow: 0 8px 32px rgba(67,234,124,0.18);
+    }
+    .card-header-modern {
+      background: linear-gradient(90deg,#43ea7c 60%,#e3f2fd 100%);
+      color: #fff;
+      font-weight: bold;
+      border-radius: 18px 18px 0 0;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 8px rgba(67,234,124,0.08);
+      letter-spacing: 1px;
+    }
+    .form-label {
+      color: #2e7d32;
+      font-weight: 600;
+    }
+    .form-control {
+      border-radius: 10px;
+      border: 1.5px solid #b2dfdb;
+      box-shadow: 0 1px 4px rgba(67,234,124,0.05);
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      border-color: #43ea7c;
+      box-shadow: 0 2px 8px rgba(67,234,124,0.10);
+    }
+    .btn-success {
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(67,234,124,0.10);
+      transition: background 0.2s;
+    }
+    .btn-success:hover {
+      background: #2e7d32;
+      color: #fff;
+      transform: scale(1.03);
+    }
+    .bg-success-subtle {
+      background: #e8f5e9 !important;
+      color: #388e3c !important;
+    }
+    .bg-danger-subtle {
+      background: #ffebee !important;
+      color: #d32f2f !important;
+    }
+    .navbar {
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 2px 12px rgba(67,234,124,0.10);
+      font-size: 1.1rem;
+    }
+    .table {
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(67,234,124,0.08);
+      overflow: hidden;
+      background: #fff;
+    }
+    .table thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(90deg,#e3f2fd,#fff);
+    }
+    .table th, .table td {
+      vertical-align: middle;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0.75rem 0.5rem;
+    }
+    .table tr:hover {
+      background: #f8f9fa;
+      transition: background 0.2s;
+    }
+    .table img {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(67,234,124,0.08);
+    }
+    .icon-title {
+      font-size: 2.2rem;
+      color: #43ea7c;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    footer {
+      border-radius: 18px 18px 0 0;
+      box-shadow: 0 -2px 12px rgba(67,234,124,0.10);
+      background: linear-gradient(90deg,#43ea7c 60%,#e3f2fd 100%);
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body class="bg-light">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm mb-2">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">🍱 Kantin SMK</a>
+      <a class="navbar-brand fw-bold" href="#"><i class="fa-solid fa-bowl-food icon-title"></i>Kantin SMK</a>
       <div class="d-flex">
-        <a href="login.html" class="btn btn-outline-light btn-sm">⬅️ Kembali</a>
+        <a href="login.html" class="btn btn-outline-light btn-sm"><i class="fa fa-arrow-left me-1"></i>Kembali</a>
       </div>
     </div>
   </nav>
 
-  <div class="container py-5">
-    <h2 class="text-center mb-4 text-success fw-bold">
-      👨‍🎓 Halaman Siswa - SMK Jakarta Pusat 1
-    </h2>
 
-    <div class="row justify-content-center">
+  <div class="container py-4">
+    <div class="row justify-content-center g-4">
       <!-- Form Siswa -->
-      <div class="col-md-6">
-        <div class="card shadow-sm border-0 rounded-4">
-          <div class="card-header bg-success text-white fw-bold rounded-top-4">
-            🧑‍🎓 Form Pembelian
+      <div class="col-12 col-lg-5 order-lg-1 mb-4">
+        <div class="card card-modern shadow h-100">
+          <div class="card-header card-header-modern">
+            <i class="fa-solid fa-clipboard-list me-2"></i>Form Pembelian
           </div>
           <div class="card-body p-4">
             <form id="formTransaksiSiswa" enctype="multipart/form-data">
-              <div class="mb-3">
-                <label class="form-label fw-semibold">📅 Tanggal</label>
-                <input type="date" name="tanggal" class="form-control" required />
-              </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">🙍‍♂️ Nama Siswa</label>
-                <input type="text" name="nama" class="form-control" placeholder="Masukkan nama lengkap" required />
-              </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">🍔 Makanan yang Dibeli</label>
-                <input type="text" name="makanan" class="form-control" placeholder="Contoh: Nasi Goreng" required />
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">💰 Harga (Rp)</label>
-                  <input type="number" name="harga" class="form-control" required />
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label fw-semibold" for="tanggal">📅 Tanggal</label>
+                  <input type="date" id="tanggal" name="tanggal" class="form-control" required />
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">💵 Uang Diberikan (Rp)</label>
-                  <input type="number" name="uang" class="form-control" required />
+                <div class="col-12">
+                  <label class="form-label fw-semibold" for="nama">🙍‍♂️ Nama Siswa</label>
+                  <input type="text" id="nama" name="nama" class="form-control" placeholder="Nama otomatis dari login" value="" readonly style="background:#f5f5f5;" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold" for="makanan">🍔 Makanan yang Dibeli</label>
+                  <input type="text" id="makanan" name="makanan" class="form-control" placeholder="Contoh: Nasi Goreng" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="harga">💰 Harga (Rp)</label>
+                  <input type="number" step="0.01" id="harga" name="harga" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="uang">💵 Uang Diberikan (Rp)</label>
+                  <input type="number" step="0.01" id="uang" name="uang" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="kembalian_seharusnya">✅ Kembalian Seharusnya (Rp)</label>
+                  <input type="number" step="0.01" id="kembalian_seharusnya" name="kembalian_seharusnya" class="form-control bg-success-subtle text-success fw-bold" readonly />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="kembalian_diterima">💸 Kembalian Diterima (Rp)</label>
+                  <input type="number" step="0.01" id="kembalian_diterima" name="kembalian_diterima" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="kekurangan_display">⚠️ Kekurangan (Rp)</label>
+                  <input type="number" step="0.01" id="kekurangan_display" name="kekurangan_display" class="form-control bg-danger-subtle text-danger fw-bold" readonly />
+                  <input type="hidden" id="kekurangan" name="kekurangan" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="bukti">📷 Foto Bukti</label>
+                  <input type="file" id="bukti" name="bukti" class="form-control" title="Upload bukti pembayaran" />
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-success w-100 py-2 shadow-sm fw-semibold"><i class="fa fa-paper-plane me-2"></i>Kirim</button>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">✅ Kembalian Seharusnya (Rp)</label>
-                  <input type="number" name="kembalian_seharusnya" class="form-control bg-success-subtle text-success fw-bold" readonly />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">💸 Kembalian Diterima (Rp)</label>
-                  <input type="number" name="kembalian_diterima" class="form-control" required />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 mb-3">
-                  <label class="form-label fw-semibold">⚠️ Kekurangan (Rp)</label>
-                  <!-- ini yang tampil -->
-                  <input type="number" name="kekurangan_display" class="form-control bg-danger-subtle text-danger fw-bold" readonly />
-                  <!-- ini yang dikirim ke database -->
-                  <input type="hidden" name="kekurangan" />
-                </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">📷 Foto Bukti</label>
-                <input type="file" name="bukti" class="form-control" />
-              </div>
-              <button class="btn btn-success w-100 py-2 shadow-sm fw-semibold">🚀 Kirim</button>
             </form>
+          </div>
+        </div>
+      </div>
+      <!-- Panel Riwayat Transaksi dan Rekap Siswa -->
+      <div class="col-12 col-lg-8 order-lg-2 mb-4">
+        <div class="card card-modern shadow h-100 mb-4">
+          <div class="card-header card-header-modern"><i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Transaksi</div>
+          <div class="card-body table-responsive p-0">
+            <table class="table table-bordered text-center align-middle mb-0" id="tabelTransaksiSiswa">
+              <thead class="table-success">
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Nama</th>
+                  <th>Makanan</th>
+                  <th>Harga</th>
+                  <th>Uang</th>
+                  <th>Kembalian</th>
+                  <th>Kekurangan</th>
+                  <th>Bukti</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Tombol Rekap Siswa (Floating Button) -->
+        <button type="button" class="btn btn-success btn-lg rounded-circle shadow position-fixed" style="bottom:32px; right:32px; z-index:1050; width:64px; height:64px; display:flex; align-items:center; justify-content:center;" data-bs-toggle="modal" data-bs-target="#rekapModal" title="Lihat Rekap Saya">
+          <i class="fa-solid fa-chart-column fa-2x"></i>
+        </button>
+        <!-- Modal Rekap Siswa -->
+        <div class="modal fade" id="rekapModal" tabindex="-1" aria-labelledby="rekapModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="rekapModalLabel"><i class="fa-solid fa-chart-column me-2"></i>Rekap Pesanan Saya</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center" id="rekapSiswa" style="font-size:1.2rem;"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <footer class="bg-success text-white text-center py-3 mt-4 shadow">
+    <p class="mb-0">© 2025 Kantin JP 1 by Fabian 🍱</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Panel Rekap Siswa
+    async function loadRekapSiswa() {
+      const res = await fetch("/siswa/rekap");
+      const r = await res.json();
+      document.querySelectorAll("#rekapSiswa").forEach(el => {
+        el.innerHTML = `
+          <div class="mb-3">
+            <span class="fs-5">Total Transaksi:</span><br>
+            <span class="badge bg-primary fs-4">${r.totalTransaksi || 0}</span>
+          </div>
+          <div class="mb-3">
+            <span class="fs-5">Total Pemasukan:</span><br>
+            <span class="badge bg-success fs-4">Rp ${r.totalPemasukan || 0}</span>
+          </div>
+          <div class="mb-3">
+            <span class="fs-5">Total Kekurangan:</span><br>
+            <span class="badge bg-danger fs-4">Rp ${r.totalKurang || 0}</span>
+          </div>
+        `;
+      });
+    }
+    // Modal rekap: load data setiap kali modal dibuka
+    document.addEventListener('DOMContentLoaded', function() {
+      loadRekapSiswa();
+      var rekapModal = document.getElementById('rekapModal');
+      if (rekapModal) {
+        rekapModal.addEventListener('show.bs.modal', loadRekapSiswa);
+      }
+    });
     const hargaInput = document.querySelector('input[name="harga"]');
     const uangInput = document.querySelector('input[name="uang"]');
-    const kembalianSeharusnyaInput = document.querySelector('input[name="kembalian_seharusnya"]');
     const kembalianDiterimaInput = document.querySelector('input[name="kembalian_diterima"]');
+    const kembalianSeharusnyaInput = document.querySelector('input[name="kembalian_seharusnya"]');
     const kekuranganDisplay = document.querySelector('input[name="kekurangan_display"]');
     const kekuranganHidden = document.querySelector('input[name="kekurangan"]');
 
     function hitungTransaksi() {
-      const harga = parseInt(hargaInput.value) || 0;
-      const uang = parseInt(uangInput.value) || 0;
-      const kembalianDiterima = parseInt(kembalianDiterimaInput.value) || 0;
+      const harga = parseFloat(hargaInput.value) || 0;
+      const uang = parseFloat(uangInput.value) || 0;
+      const kembalianDiterima = parseFloat(kembalianDiterimaInput.value) || 0;
 
-      // Hitung kembalian seharusnya
       const kembalianSeharusnya = uang - harga;
-      kembalianSeharusnyaInput.value = kembalianSeharusnya >= 0 ? kembalianSeharusnya : 0;
+      kembalianSeharusnyaInput.value = kembalianSeharusnya >= 0 ? kembalianSeharusnya.toFixed(2) : "0.00";
 
-      // Hitung kekurangan
       const kekurangan = kembalianSeharusnya - kembalianDiterima;
-      const hasil = kekurangan > 0 ? kekurangan : 0;
+      const hasil = kekurangan > 0 ? kekurangan.toFixed(2) : "0.00";
 
-      // update ke dua field
       kekuranganDisplay.value = hasil;
       kekuranganHidden.value = hasil;
     }
 
-    [hargaInput, uangInput, kembalianDiterimaInput].forEach(el => {
-      el.addEventListener("input", hitungTransaksi);
-    });
+    [hargaInput, uangInput, kembalianDiterimaInput].forEach(el => el.addEventListener("input", hitungTransaksi));
 
-    // Submit form siswa
     document.getElementById("formTransaksiSiswa").addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(e.target);
@@ -128,14 +292,47 @@
       loadTransaksiSiswa();
     });
 
-    // Dummy fungsi load transaksi
-    function loadTransaksiSiswa() {
-      console.log("Transaksi siswa berhasil dimuat (dummy).");
+    async function loadTransaksiSiswa() {
+      const res = await fetch("/siswa/riwayat");
+      const data = await res.json();
+      const tbody = document.querySelector("#tabelTransaksiSiswa tbody");
+      tbody.innerHTML = "";
+      data.forEach((t, i) => {
+        // Format tanggal ke format lokal Indonesia
+        let tanggalFormatted = t.tanggal;
+        if (t.tanggal) {
+          const d = new Date(t.tanggal);
+          if (!isNaN(d)) {
+            tanggalFormatted = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+          }
+        }
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold text-secondary">${i + 1}</td>
+            <td class="text-success">${tanggalFormatted}</td>
+            <td class="fw-semibold">${t.nama}</td>
+            <td>${t.makanan}</td>
+            <td class="text-end">Rp ${parseFloat(t.harga).toLocaleString()}</td>
+            <td class="text-end">Rp ${parseFloat(t.uang).toLocaleString()}</td>
+            <td class="text-end">Rp ${parseFloat(t.kembalian).toLocaleString()}</td>
+            <td class="text-end" style="color:${t.kekurangan > 0 ? 'red':'green'}; font-weight:600;">Rp ${parseFloat(t.kekurangan).toLocaleString()}</td>
+            <td>${t.bukti ? `<img src="/uploads/${t.bukti}" class="rounded shadow-sm" style="max-width:50px; max-height:50px; object-fit:cover;">` : "-"}</td>
+          </tr>
+        `;
+      });
     }
+    loadTransaksiSiswa();
+
+    async function loadRekapSiswa() {
+      const res = await fetch("/siswa/rekap");
+      const r = await res.json();
+      document.getElementById("rekapSiswa").innerHTML = `
+        <p>Total Transaksi: <b>${r.totalTransaksi || 0}</b></p>
+        <p>Total Pemasukan: <b>Rp ${r.totalPemasukan || 0}</b></p>
+        <p>Total Kekurangan: <b style="color:red">Rp ${r.totalKurang || 0}</b></p>
+      `;
+    }
+    loadRekapSiswa();
   </script>
 </body>
-  <!-- footer  -->
-<footer class="bg-success text-white text-center py-3 mt-4 shadow">
-  <p class="mb-0">© 2025 Kantin JP 1 by Fabian 🍱</p>
-</footer>
 </html>

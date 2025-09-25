@@ -1,58 +1,10 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const db = require("./db");
-
-const router = express.Router();
-
 // ---------------------
-// Konfigurasi upload
+// GET riwayat transaksi untuk siswa (seluruh data)
 // ---------------------
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) =>
-    cb(null, Date.now() + path.extname(file.originalname)),
-});
-const upload = multer({ storage });
-
-router.post("/transaksi", upload.single("bukti"), (req, res) => {
-  const { tanggal, nama, makanan, harga, uang, kembalian, kekurangan } = req.body;
-
-  const hargaNum = parseFloat(harga) || 0;
-  const uangNum = parseFloat(uang) || 0;
-  const kembalianNum = parseFloat(kembalian) || 0;
-  const kekuranganNum = parseFloat(kekurangan) || 0;
-
-  const bukti = req.file ? req.file.filename : null;
-
+router.get("/riwayat", (req, res) => {
   const sql = `
-    INSERT INTO transaksi 
-      (tanggal, nama, makanan, harga, uang, kembalian, kekurangan, bukti)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  db.query(sql, [
-    tanggal,
-    nama,
-    makanan,
-    hargaNum,
-    uangNum,
-    kembalianNum,
-    kekuranganNum,
-    bukti
-  ], (err) => {
-    if (err) throw err;
-    res.json({ success: true, message: "Transaksi berhasil disimpan!" });
-  });
-});
-// ---------------------
-// GET semua transaksi
-// ---------------------
-router.get("/transaksi", (req, res) => {
-  const sql = `
-    SELECT 
-      id, nama, makanan, harga, uang, kembalian, kekurangan, bukti,
-      DATE_FORMAT(tanggal, '%d-%m-%Y') AS tanggal
+    SELECT id, nama, makanan, harga, uang, kembalian, kekurangan, bukti, status,
+           DATE_FORMAT(tanggal, '%d-%m-%Y') AS tanggal
     FROM transaksi
     ORDER BY id DESC
   `;
@@ -63,31 +15,82 @@ router.get("/transaksi", (req, res) => {
 });
 
 // ---------------------
-// GET rekap
+// CREATE transaksi
 // ---------------------
-router.get("/rekap", (req, res) => {
+router.post("/transaksi", upload.single("bukti"), (req, res) => {
+  const { tanggal, nama, makanan, harga, uang, kembalian, kekurangan } = req.body;
+
+  const bukti = req.file ? req.file.filename : null;
+
   const sql = `
-    SELECT 
-      COUNT(*) AS totalTransaksi,
-      SUM(harga) AS totalPemasukan,
-      SUM(kekurangan) AS totalKurang
-    FROM transaksi
+    INSERT INTO transaksi 
+      (tanggal, nama, makanan, harga, uang, kembalian, kekurangan, bukti, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
-  db.query(sql, (err, result) => {
-    if (err) throw err;
-    res.json(result[0]);
+
+  db.query(sql, [
+    tanggal,
+    nama,
+    makanan,
+    parseFloat(harga) || 0,
+    parseFloat(uang) || 0,
+    parseFloat(kembalian) || 0,
+    parseFloat(kekurangan) || 0,
+    bukti,
+    "Belum Lunas"
+  ], (err) => {
+    if (err) return res.status(500).json({ success: false, message: err.message });
+    res.json({ success: true, message: "Transaksi berhasil disimpan!" });
   });
 });
 
 // ---------------------
-// DELETE transaksi
+// GET semua transaksi
 // ---------------------
-router.delete("/transaksi/:id", (req, res) => {
-  const { id } = req.params;
-  db.query("DELETE FROM transaksi WHERE id = ?", [id], (err) => {
+router.get("/transaksi", (req, res) => {
+  const sql = `
+    SELECT id, nama, makanan, harga, uang, kembalian, kekurangan, bukti, status,
+           DATE_FORMAT(tanggal, '%d-%m-%Y') AS tanggal
+    FROM transaksi
+    ORDER BY id DESC
+  `;
+  db.query(sql, (err, results) => {
     if (err) throw err;
-    res.json({ success: true, message: "Transaksi berhasil dihapus!" });
+    res.json(results);
   });
+});
+
+// Update status jadi Lunas + reset kekurangan
+router.put("/transaksi/:id/lunas", (req, res) => {
+  const { id } = req.params;
+  const sql = `UPDATE transaksi SET status='Lunas', kekurangan=0 WHERE id=?`;
+  db.query(sql, [id], (err) => {
+    if (err) return res.status(500).json({ success:false, message:err.message });
+    res.json({ success:true, message:"Status diubah menjadi Lunas!" });
+  });
+});
+
+// Update status jadi Belum Lunas
+router.put("/transaksi/:id/belum-lunas", (req, res) => {
+  const { id } = req.params;
+  const sql = `UPDATE transaksi SET status='Belum Lunas' WHERE id=?`;
+  db.query(sql, [id], (err) => {
+    if (err) return res.status(500).json({ success:false, message:err.message });
+    res.json({ success:true, message:"Status diubah menjadi Belum Lunas!" });
+  });
+});
+
+// Endpoint: GET /siswa/rekap
+app.get("/siswa/rekap", cekLogin, (req, res) => {
+  if (req.session.user.role !== "siswa") return aksesDitolak(res);
+  db.query(
+    "SELECT COUNT(*) AS totalTransaksi, SUM(harga) AS totalPemasukan, SUM(kekurangan) AS totalKurang FROM transaksi WHERE nama=?",
+    [req.session.user.username],
+    (err, result) => {
+      if (err) throw err;
+      res.json(result[0]);
+    }
+  );
 });
 
 module.exports = router;
