@@ -177,11 +177,34 @@
                   <th>Uang</th>
                   <th>Kembalian</th>
                   <th>Kekurangan</th>
+                  <th>Aksi</th>
                   <th>Bukti</th>
                   <th>Keterangan</th>
                 </tr>
               </thead>
               <tbody></tbody>
+            </table>
+            <!-- Modal Edit Kekurangan -->
+            <div class="modal fade" id="modalEditKekurangan" tabindex="-1" aria-labelledby="modalEditKekuranganLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                  <div class="modal-header bg-warning bg-gradient text-dark border-0">
+                    <h5 class="modal-title fw-bold" id="modalEditKekuranganLabel"><i class="fa fa-pen me-2"></i>Edit Kekurangan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="formEditKekurangan">
+                      <input type="hidden" id="editKekuranganId" />
+                      <div class="mb-3">
+                        <label class="form-label">Kekurangan (Rp)</label>
+                        <input type="number" id="editKekuranganValue" class="form-control border-2 border-warning-subtle bg-light fw-bold text-danger" min="0" required />
+                      </div>
+                      <button type="submit" class="btn btn-lg btn-warning w-100 fw-bold shadow-sm"><i class="fa fa-save me-2"></i>Update Kekurangan</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
             </table>
           </div>
         </div>
@@ -195,6 +218,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
 
   <footer class="bg-success text-white text-center shadow mt-4">

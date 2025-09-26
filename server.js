@@ -6,13 +6,6 @@ const path = require("path");
 const multer = require("multer");
 
 const app = express();
-
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use("/uploads", express.static("uploads"));
-app.use(express.static("public"));
-
 app.use(
   session({
     secret: "kantinSMK",
@@ -20,6 +13,38 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+app.use(express.static("public"));
+
+app.put("/admin/transaksi/:id/kekurangan", cekLogin, (req, res) => {
+  if (req.session.user.role !== "admin") return res.status(403).json({ success: false, message: "Akses ditolak" });
+  const id = req.params.id;
+  const { kekurangan } = req.body;
+  db.query("UPDATE transaksi SET kekurangan=? WHERE id=?", [kekurangan, id], (err, result) => {
+    if (err) {
+      console.error("[ERROR UPDATE KEKURANGAN]", err);
+      return res.status(500).json({ success: false, message: err.message });
+    }
+    if (result.affectedRows === 0) {
+      console.warn("[WARNING] Tidak ada transaksi dengan id:", id);
+      return res.status(404).json({ success: false, message: "Transaksi tidak ditemukan" });
+    }
+    res.json({ success: true });
+  });
+});
+
+
+app.put("/api/transaksi/:id/lunas", cekLogin, (req, res) => {
+  if (req.session.user.role !== "admin") return res.status(403).json({ success: false, message: "Akses ditolak" });
+  const id = req.params.id;
+  db.query("UPDATE transaksi SET kekurangan=0 WHERE id=?", [id], (err) => {
+    if (err) return res.status(500).json({ success: false, message: err.message });
+    res.json({ success: true });
+  });
+});
 
 // Upload bukti
 const storage = multer.diskStorage({
@@ -29,15 +54,29 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Middleware cek login
 function cekLogin(req, res, next) {
-  if (!req.session.user) return res.redirect("/login");
+  if (!req.session.user) {
+    // Jika request ke endpoint API (AJAX/fetch), balas JSON error
+    if (req.headers.accept && req.headers.accept.indexOf('application/json') !== -1) {
+      return res.status(401).json({ success: false, message: "Belum login" });
+    } else {
+      return res.redirect("/login");
+    }
+  }
   next();
 }
 
-// Fungsi akses ditolak
+
 function aksesDitolak(res) {
-  res.sendFile(path.join(__dirname, "public/akses-ditolak.html"));
+ 
+  res.format({
+    'application/json': function () {
+      res.status(403).json({ success: false, message: "Akses ditolak" });
+    },
+    'default': function () {
+      res.sendFile(path.join(__dirname, "public/akses-ditolak.html"));
+    }
+  });
 }
 
 // ---------------- AUTH -----------------

@@ -33,7 +33,14 @@ async function loadTransaksi() {
         <td class="text-end">Rp ${t.harga.toLocaleString()}</td>
         <td class="text-end">Rp ${t.uang.toLocaleString()}</td>
         <td class="text-end">Rp ${t.kembalian.toLocaleString()}</td>
-        <td class="text-end" style="color:${t.kekurangan > 0 ? 'red' : 'green'};font-weight:600;">Rp ${t.kekurangan.toLocaleString()}</td>
+        <td class="text-end" style="color:${t.kekurangan > 0 ? 'red' : 'green'};font-weight:600;">
+          Rp ${t.kekurangan.toLocaleString()}
+        </td>
+        <td>
+          <button class="btn btn-outline-warning btn-sm rounded-circle shadow-sm" onclick="showEditKekurangan(${t.id}, ${t.kekurangan})" title="Edit Kekurangan">
+            <i class="fa fa-pen"></i>
+          </button>
+        </td>
         <td>${t.bukti ? `<img src="/uploads/${t.bukti}" class="rounded shadow-sm" style="max-width:50px;max-height:50px;object-fit:cover;">` : "<span class='text-muted'>-</span>"}</td>
         <td>
           ${
@@ -47,7 +54,35 @@ async function loadTransaksi() {
   });
 }
 
+// Show modal edit kekurangan
+window.showEditKekurangan = function(id, kekurangan) {
+  document.getElementById('editKekuranganId').value = id;
+  document.getElementById('editKekuranganValue').value = kekurangan;
+  var modal = new bootstrap.Modal(document.getElementById('modalEditKekurangan'));
+  modal.show();
+}
 
+// Handle submit edit kekurangan
+document.addEventListener('DOMContentLoaded', function() {
+  const formEdit = document.getElementById('formEditKekurangan');
+  if(formEdit){
+    formEdit.onsubmit = async function(e){
+      e.preventDefault();
+      const id = document.getElementById('editKekuranganId').value;
+      const value = document.getElementById('editKekuranganValue').value;
+      const res = await fetch(`/admin/transaksi/${id}/kekurangan`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kekurangan: value })
+      });
+      if(await res.json()){
+        bootstrap.Modal.getInstance(document.getElementById('modalEditKekurangan')).hide();
+        loadTransaksi();
+        loadRekap && loadRekap();
+      }
+    }
+  }
+});
 // Update status → permanen di database
 async function updateStatus(id, status) {
   const url = `/api/transaksi/${id}/${status}`;
